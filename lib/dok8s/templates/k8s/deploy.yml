@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $SERVICE
+  namespace: default
+  labels:
+    app: $SERVICE
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: $SERVICE
+  template:
+    metadata:
+      labels:
+        app: $SERVICE
+    spec:
+      containers:
+        - name: $SERVICE
+          image: $REGISTRY/$SERVICE:$GIT_SHORT
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: $SERVICE
+                  key: RAILS_MASTER_KEY
+            - name: RAILS_ENV
+              value: production
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
+            - name: RAILS_SERVE_STATIC_FILES
+              value: "true"
+
+        - name: $SERVICE-sidekiq
+          image: $REGISTRY/$SERVICE:$GIT_SHORT
+          imagePullPolicy: Always
+          command: ["sidekiq"]
+          env:
+              - name: RAILS_MASTER_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: $SERVICE
+                    key: RAILS_MASTER_KEY
+              - name: RAILS_ENV
+                value: production
+              - name: RAILS_LOG_TO_STDOUT
+                value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $SERVICE
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: $SERVICE
