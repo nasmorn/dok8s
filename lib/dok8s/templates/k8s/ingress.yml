@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - $SERVICE.romanalmeida.com
+    - $SERVICE.k8s.romanalmeida.com
     secretName: $SERVICE-tls
   rules:
-  - host: $SERVICE.romanalmeida.com
+  - host: $SERVICE.k8s.romanalmeida.com
     http:
       paths:
       - path: /

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 namespace :db do
+  desc "Allows you to download your production DB and load into dev"
   task :sync do
     puts "Downloading your DB from prod"
     system "PGPASSWORD=\"#{production.fetch("password")}\" pg_dump #{production.fetch("database")} --host #{host} --port #{production.fetch("port")} --username #{production.fetch("username")} --clean > tmp/dump.sql"

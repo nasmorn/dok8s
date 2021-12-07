@@ -20,14 +20,6 @@ namespace :k8s do
     # Create files
     ["deploy.yml", "ingress.yml"].each do |file|
       Templater.new("lib/dok8s/templates/k8s/#{file}", "lib/k8s/#{file}", { "SERVICE" => service, "REGISTRY" => registry }).copy
-
-      # source_file = File.join(Dok8s::Engine.root, "lib/dok8s/templates/k8s", file)
-      # dest_file = File.join(Rails.root, K8S_DIR, file)
-
-      # unless File.exists?(dest_file)
-      #   `SERVICE=#{service} REGISTRY=#{registry} envsubst '$SERVICE $REGISTRY' < #{source_file} > #{dest_file}`
-      #   puts "File #{file} created"
-      # end
     end
   rescue CredentialsError => e
     puts "Not all required credentials are present"
@@ -115,12 +107,16 @@ namespace :k8s do
   end
 
   def registry
+    return ENV["K8S_REGISTRY"] if ENV["K8S_REGISTRY"]
+
     credentials.fetch(:registry).tap do |value|
       raise CredentialsError, "Please create k8s.registry like registry.digitalocean.com/name" unless value
     end
   end
 
   def service
+    return ENV["K8S_SERVICE"] if ENV["K8S_REGISTRY"]
+
     credentials.fetch(:service).tap do |value|
       raise CredentialsError, "Please create k8s.service like app_name" unless value
     end

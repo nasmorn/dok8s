@@ -20,5 +20,4 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.7"
 
   s.add_dependency "rake"
-  s.add_dependency "rails", ">= 6.0"
 end
