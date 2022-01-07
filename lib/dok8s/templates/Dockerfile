@@ -1,4 +1,4 @@
-FROM ruby:3.0.2
+FROM ruby:3.0.3
 LABEL maintainer="admin@romanalmeida.com"
 
 RUN apt-get install ca-certificates
@@ -7,14 +7,15 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
   apt-get update -y && apt-get install -y \
   ca-certificates \
   libssl-dev \
-  nodejs
+  nodejs \
+  && rm -rf /var/lib/apt/lists/*
   
-ARG BUNDLE_WITHOUT
-
 # Bundle the gems - doing it in tmp will make sure the layer is cached by Docker
 COPY Gemfile* /tmp/
 WORKDIR /tmp
-RUN gem install bundler && bundle install --jobs 20 --retry 5 ${BUNDLE_WITHOUT}
+ARG BUNDLE_WITHOUT
+RUN bundle config set --local without ${BUNDLE_WITHOUT} && \
+    gem install bundler && bundle install --jobs 5 --retry 5
 
 ENV app /app
 RUN mkdir $app

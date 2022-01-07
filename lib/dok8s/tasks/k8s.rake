@@ -39,7 +39,7 @@ namespace :k8s do
   task :build do
     master_key = ENV["RAILS_MASTER_KEY"]
     master_key ||= `cat config/master.key`.strip
-    logged_system "docker build --tag #{service} --build-arg RAILS_MASTER_KEY=#{master_key} --build-arg BUNDLE_WITHOUT='--without=development test' ."
+    logged_system "docker build --tag #{service} --build-arg RAILS_MASTER_KEY=#{master_key} --build-arg BUNDLE_WITHOUT='development test' ."
   end
 
   task :push do
@@ -75,6 +75,14 @@ namespace :k8s do
 
   task :logs do
     logged_system "kubectl logs #{first_container}"
+  end
+
+  task :shared do
+    "kubectl apply -f #{shared_yml('imagor')}"
+  end
+
+  def shared_yml(name)
+    File.join(Dok8s.root, "lib", "dok8s", "k8s", "#{name}.yml")
   end
 
   def commit

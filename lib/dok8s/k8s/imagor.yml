@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imagor
+  namespace: default
+  labels:
+    app: imagor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: imagor
+  template:
+    metadata:
+      labels:
+        app: imagor
+    spec:
+      containers:
+        - name: imagor
+          image: shumc/imagor:0.6.1
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: IMAGOR_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: imagor
+                  key: IMAGOR_SECRET
+            - name: HTTP_LOADER_ALLOWED_SOURCES
+              value: auflager-repo-prd.s3.eu-central-1.amazonaws.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: imagor
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: imagor
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: imagor-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+spec:
+  tls:
+  - hosts:
+    - imagor.k8s.romanalmeida.com
+    secretName: imagor-tls
+  rules:
+  - host: imagor.k8s.romanalmeida.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: imagor
+            port:
+              number: 80
+
