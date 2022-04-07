@@ -5,7 +5,7 @@ namespace :db do
   task :sync do
     puts "Downloading your DB from prod"
     system "PGPASSWORD=\"#{production.fetch("password")}\" pg_dump #{production.fetch("database")} --host #{host} --port #{production.fetch("port")} --username #{production.fetch("username")} --clean > tmp/dump.sql"
-    system "cat tmp/dump.sql | psql #{development.fetch("database")} --username PGPASSWORD=\"#{development.fetch("user")}\""
+    system "cat tmp/dump.sql | psql #{development.fetch("database")} --username #{development.fetch("user")}"
 
     puts "If you cannot connect check if the current IP is allowed on the DB server."
   end
