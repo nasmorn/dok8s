@@ -4,7 +4,8 @@ require_relative "templater"
 
 def logged_system(cmd)
   puts cmd
-  system cmd
+  sucess = system cmd
+  raise "System Command: #{cmd} failed" unless success
 end
 
 class CredentialsError < RuntimeError; end
