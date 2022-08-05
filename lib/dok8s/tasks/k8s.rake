@@ -4,7 +4,7 @@ require_relative "templater"
 
 def logged_system(cmd)
   puts cmd
-  sucess = system cmd
+  success = system cmd
   raise "System Command: #{cmd} failed" unless success
 end
 
