@@ -106,6 +106,8 @@ namespace :k8s do
   end
 
   def apply(name)
+    return unless File.exist?(yml(name))
+
     logged_system "GIT_SHORT=#{commit} envsubst < #{yml(name)} | kubectl apply -f -"
   end
 
