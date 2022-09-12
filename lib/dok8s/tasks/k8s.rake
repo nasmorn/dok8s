@@ -30,7 +30,7 @@ namespace :k8s do
   desc "Initial deploy"
   task :init do
     # Set RAILS_MASTER_KEY secret in the cluster
-    logged_system "kubectl create secret generic #{service} --from-file=RAILS_MASTER_KEY=./config/master.key"
+    logged_system "kubectl create secret generic #{service} --from-literal=RAILS_MASTER_KEY=#{master_key_from_file}"
 
     # Initialize the deployment files
     create("deploy")
@@ -38,7 +38,7 @@ namespace :k8s do
 
   task :build do
     master_key = ENV["RAILS_MASTER_KEY"]
-    master_key ||= `cat config/master.key`.strip
+    master_key ||= master_key_from_file
     logged_system "docker build --tag #{service} --build-arg RAILS_MASTER_KEY=#{master_key} --build-arg BUNDLE_WITHOUT='development test' ."
   end
 
@@ -78,6 +78,10 @@ namespace :k8s do
 
   task :shared do
     "kubectl apply -f #{shared_yml('imagor')}"
+  end
+
+  def master_key_from_file
+    `cat config/master.key`.strip
   end
 
   def shared_yml(name)
