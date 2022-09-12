@@ -15,7 +15,14 @@ Don't forget that Github Actions will need the `RAILS_MASTER_KEY` and a `DIGITAL
 - `rails db:sync` - Overwrites the local dev DB with the production DB
 
 
-## Redeploy imagor
+# Imagor
+
+Initial deploy
+
+    kubectl create secret generic imagor \
+      --from-literal=IMAGOR_SECRET=THE_ACTUAL_SECRET
+
+## Redeploy
 
 Edit the file to e.g upgrade the image
 
