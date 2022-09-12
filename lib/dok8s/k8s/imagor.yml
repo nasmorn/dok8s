@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: imagor
-          image: shumc/imagor:0.6.1
+          image: shumc/imagor:1.1.0
           ports:
             - containerPort: 80
               name: http

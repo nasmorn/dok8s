@@ -13,3 +13,12 @@ Don't forget that Github Actions will need the `RAILS_MASTER_KEY` and a `DIGITAL
 ## Dev Helpers
 
 - `rails db:sync` - Overwrites the local dev DB with the production DB
+
+
+## Redeploy imagor
+
+Edit the file to e.g upgrade the image
+
+
+    kubectl apply -f lib/dok8s/k8s/imagor.yml
+
