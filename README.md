@@ -14,6 +14,14 @@ Don't forget that Github Actions will need the `RAILS_MASTER_KEY` and a `DIGITAL
 
 - `rails db:sync` - Overwrites the local dev DB with the production DB
 
+# Issuer
+
+After installing the Cert-Manager 1-Click App on Digital Ocean
+
+```
+    kubectl create -f lib/dok8s/k8s/issuer.yml
+```
+
 
 # Imagor
 
@@ -21,6 +29,7 @@ Initial deploy
 
     kubectl create secret generic imagor \
       --from-literal=IMAGOR_SECRET=THE_ACTUAL_SECRET
+    kubectl create -f lib/dok8s/k8s/imagor.yml
 
 ## Redeploy
 
