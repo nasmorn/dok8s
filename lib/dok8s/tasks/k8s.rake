@@ -19,7 +19,7 @@ namespace :k8s do
     return unless registry && service
 
     # Create files
-    ["deploy.yml", "ingress.yml"].each do |file|
+    ["deploy.yml"].each do |file|
       Templater.new("lib/dok8s/templates/k8s/#{file}", "lib/k8s/#{file}", { "SERVICE" => service, "REGISTRY" => registry }).copy
     end
   rescue CredentialsError => e
@@ -34,7 +34,6 @@ namespace :k8s do
 
     # Initialize the deployment files
     create("deploy")
-    create("ingress")
   end
 
   task :build do
@@ -49,9 +48,8 @@ namespace :k8s do
   end
 
   task :rollout do
-    # In case the deployment or ingress files have changed
+    # In case the deployment file has changed
     apply("deploy")
-    apply("ingress")
 
     # To trigger a deployment
     logged_system "kubectl rollout restart deployment/#{service}"
