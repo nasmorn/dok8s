@@ -39,7 +39,7 @@ namespace :k8s do
   task :build do
     master_key = ENV["RAILS_MASTER_KEY"]
     master_key ||= master_key_from_file
-    logged_system "docker build --tag #{service} --build-arg RAILS_MASTER_KEY=#{master_key} --build-arg BUNDLE_WITHOUT='development test' ."
+    logged_system "docker build --tag #{service} --build-arg RAILS_MASTER_KEY=#{master_key} --platform linux/x86_64 ."
   end
 
   task :push do
