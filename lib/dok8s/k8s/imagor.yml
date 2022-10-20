@@ -27,8 +27,35 @@ spec:
                 secretKeyRef:
                   name: imagor
                   key: IMAGOR_SECRET
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: imagor
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: imagor
+                  key: AWS_SECRET_ACCESS_KEY
             - name: HTTP_LOADER_ALLOWED_SOURCES
               value: auflager-repo-prd.s3.eu-central-1.amazonaws.com
+            - name: S3_STORAGE_BUCKET
+              value: auflager
+            - name: S3_STORAGE_BASE_DIR
+              value: images/storage
+            - name: S3_RESULT_STORAGE_ACL
+              value: private
+            - name: S3_RESULT_STORAGE_BUCKET
+              value: auflager
+            - name: S3_RESULT_STORAGE_BASE_DIR
+              value: imagor/result
+            - name: S3_RESULT_STORAGE_ACL
+              value: public-read
+            - name: S3_ENDPOINT
+              value: https://fra1.digitaloceanspaces.com
+            - name: AWS_REGION
+              value: fra1
+
 ---
 apiVersion: v1
 kind: Service

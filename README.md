@@ -28,7 +28,9 @@ After installing the Cert-Manager 1-Click App on Digital Ocean
 Initial deploy
 
     kubectl create secret generic imagor \
-      --from-literal=IMAGOR_SECRET=THE_ACTUAL_SECRET
+      --from-literal=IMAGOR_SECRET=THE_ACTUAL_SECRET \
+      --from-literal=AWS_ACCESS_KEY_ID=THE_ACTUAL_SECRET \
+      --from-literal=AWS_SECRET_ACCESS_KEY=THE_ACTUAL_SECRET
     kubectl create -f lib/dok8s/k8s/imagor.yml
 
 ## Redeploy
