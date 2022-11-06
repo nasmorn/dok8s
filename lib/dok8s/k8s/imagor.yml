@@ -18,6 +18,7 @@ spec:
       containers:
         - name: imagor
           image: shumc/imagor:1.1.0
+          command: ["-imagor-auto-webp"]
           ports:
             - containerPort: 80
               name: http
